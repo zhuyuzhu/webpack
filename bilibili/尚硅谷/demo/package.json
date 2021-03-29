@@ -4,11 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "pro": "webpack ./src/index.js -o ./dist --mode=production",
+    "dev": "webpack ./src/index.js -o ./build --mode=development",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "css-loader": "^5.2.0",
+    "style-loader": "^2.0.0",
     "webpack": "^5.28.0",
     "webpack-cli": "^4.6.0"
   }

@@ -6,10 +6,17 @@ module.exports = {
     entry: './src/index.js',
     output: {
         filename: 'dev.js',
-        path: path.resolve(__dirname, 'dev')
+        path: path.resolve(__dirname, 'dev'),
+        publicPath: './dev'
     },
     module: {
         rules: [
+            {//处理html中img图片
+                test: /\.html$/,
+                use: [
+                    'html-loader'
+                ]
+            },
             {//配置css loader
                 test: /\.css$/,
                 use: [
@@ -25,6 +32,7 @@ module.exports = {
                     'less-loader'//处理less为css 需要下载less和less-loader
                 ]
             },
+            
             {
                 test: /\.(png|jpg|gif)$/i,
                 use: [
@@ -34,8 +42,9 @@ module.exports = {
                         limit: 8192, //8*1024
                       },
                     },
-                  ],
-            }
+                ]
+            },
+            
         ]
     },
     plugins: [

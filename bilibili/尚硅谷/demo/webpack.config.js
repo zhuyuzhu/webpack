@@ -7,16 +7,10 @@ module.exports = {
     output: {
         filename: 'dev.js',
         path: path.resolve(__dirname, 'dev'),
-        publicPath: './dev'
     },
     module: {
         rules: [
-            {//处理html中img图片
-                test: /\.html$/,
-                use: [
-                    'html-loader'
-                ]
-            },
+            
             {//配置css loader
                 test: /\.css$/,
                 use: [
@@ -40,11 +34,27 @@ module.exports = {
                       loader: 'url-loader',
                       options: {
                         limit: 8192, //8*1024
+                        esModule:false, //不启用ES6模块加载方式，而使用commonjs模块加载方式
+                        name: 'imgs/[hash].[ext]', //与output的path路径拼接
                       },
+                      
                     },
                 ]
             },
-            
+            {//处理html中img图片
+                test: /\.html$/,
+                loader: 'html-loader',
+                options: {
+                    esModule:false,
+                }
+            },
+            {
+                exclude: /\.(js|json|html|css|less|png|jpg|gif)$/,
+                loader: 'file-loader',
+                options: {
+                    name: 'iconfont/[hash].[ext]', //指定输出目录，拼接output的path
+                }
+            }
         ]
     },
     plugins: [
@@ -55,5 +65,11 @@ module.exports = {
             template: path.resolve(__dirname, 'src/template.html') //依赖的文件模板（依赖html文件中没有引入js，因为会主动注入）
         })
     ],
-    mode: 'development' //开发模式
+    mode: 'development', //开发模式
+    devServer: {//热加载
+        contentBase: path.resolve(__dirname), //指定哪个目录为本地服务器的根目录
+        compress: true, //启动gzip压缩
+        port: 3000, //端口号
+        open: true, //默认不自动打开浏览器
+    }
 }

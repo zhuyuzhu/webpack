@@ -1,4 +1,4 @@
-# webpack入门
+# webpack入门——version5.28.0
 
 ```shell
 package name: (demo)
@@ -164,4 +164,94 @@ github地址：https://github.com/webpack-contrib/url-loader
 
 将图片base64处理，会减少图片请求，但是会增大体积。8——12kb以下的图片，进行base64处理
 
-不
+配置 ：
+
+```js
+            {
+                test: /\.(png|jpg|gif)$/i,
+                use: [
+                    {
+                      loader: 'url-loader',
+                      options: {
+                        limit: 8192, //8*1024
+                        esModule:false,
+                      },
+                    },
+                ]
+            },
+```
+
+
+
+如果也需要处理img标签中的src引入的图片，需要下载`html-loader`
+
+```js
+{//处理html中img图片
+                test: /\.html$/,
+                loader: 'html-loader',
+                options: {
+                    esModule:false,
+                }
+            },
+```
+
+因为html-loader也会走url-loader，指定url-loader的路径
+
+**配置如下：name: 'imgs/[hash].[ext]', //与output的path路径拼接**
+
+```js
+            {
+                test: /\.(png|jpg|gif)$/i,
+                use: [
+                    {
+                      loader: 'url-loader',
+                      options: {
+                        limit: 8192, //8*1024
+                        esModule:false, //不启用ES6模块加载方式，而使用commonjs模块加载方式
+                        name: 'imgs/[hash].[ext]', //与output的path路径拼接
+                      },
+                      
+                    },
+                ]
+            },
+            {//处理html中img图片
+                test: /\.html$/,
+                loader: 'html-loader',
+                options: {
+                    esModule:false,
+                }
+            },
+```
+
+
+
+### webpack 打包其他资源——不需要做特殊处理、不需要压缩
+
+依赖loader：file-loader
+
+
+
+比如阿里矢量图
+
+```js
+            {
+                exclude: /\.(js|json|html|css|less|png|jpg|gif)$/,
+                loader: 'file-loader',
+                options: {
+                    name: 'iconfont/[hash].[ext]', //指定输出目录，拼接output的path
+                }
+            }
+```
+
+
+
+devServer配置：
+
+开发服务器 ：代码更新时，自动编译，自动打开浏览器，自动刷新浏览器，只会在内存中打包，不会有输出。
+
+依赖包：webpack-dev-server
+
+启动命令：`npx webpack serve` 
+
+——npx是什么？？？
+
